@@ -1,0 +1,19 @@
+[{
+    "id": 1,
+    "name": "Alice",
+    "message": "my first message",
+    "postedAt": "2019-01-01T14:00:00.000Z"
+},
+{
+    "id": 2,
+    "name": "Alice",
+    "message": "my third message",
+    "postedAt": "2019-01-01T14:01:00.000Z"
+},
+{
+    "id": 3,
+    "name": "Alice",
+    "message": "my second message",
+    "postedAt": "2019-01-01T14:02:00.000Z"
+}
+]
