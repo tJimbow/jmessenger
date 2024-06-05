@@ -13,11 +13,12 @@ describe("posting a message", () => {
         then_i_should_see_adding_message_form();
     });
 
-    it("should post a message with a date", () => {
+    it("should post a message when the user click on the send button", () => {
         given_now_is("2019-01-01T14:02:30.000Z");
+        given_adding_message_should_return_201();
         when_i_visit_the_jmessenger_page();
         when_user_post_a_message("my first message");
-        then_the_message_should_be_posted_with({ author: "Alice", message: "my first message", postedAt: "il y a 2 minutes"});
+        then_the_message_should_be_posted_with({ author: "Alice", message: "my first message", postedAt: "2019-01-01T14:00:00.000Z"});
     })
 })
 
@@ -44,12 +45,14 @@ const when_user_post_a_message = (message: string) => {
     cy.get(dataSelector('message.add.button')).click();
 }
 
-const then_the_message_should_be_posted_with = ({author, message, postedAt}: {author: string, message: string, postedAt: string}) => {
-    cy.intercept('POST', '/api/add-message').as('addMessage');
-
+const then_the_message_should_be_posted_with = (expectedPostedMessage: {author: string, message: string, postedAt: string}) => {
     cy.wait('@addMessage')
         .its('request.body')
-        .should('have.property', 'author', author)
-        .and('have.property', 'message', message)
-        .and('have.property', 'postedAt', postedAt);
+        .should("deep.equal" , expectedPostedMessage);
+}
+
+const given_adding_message_should_return_201 = () => {
+    cy.intercept('POST', '/api/add-message', {
+        statusCode: 201,
+    }).as('addMessage');
 }
