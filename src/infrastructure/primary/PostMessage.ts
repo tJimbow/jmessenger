@@ -1,4 +1,5 @@
-import { Message } from "./Message";
+import type { MessageRepository } from "@/domain/MessageRepository";
+import { Message } from "../../domain/Message";
 
 export interface MessageToPost {
     id: string;
@@ -6,17 +7,12 @@ export interface MessageToPost {
     text: string;
 }
 
-export interface MessageRepository {
-    save(message: Message): void
-}
-
-
 export interface DateProvider {
     getNow(): Date;
 }
 
 export class PostMessage {
-    constructor(private readonly messageRepository, private readonly dateProvider: DateProvider) { }
+    constructor(private readonly messageRepository: MessageRepository, private readonly dateProvider: DateProvider) { }
 
     handle(messageToPost: MessageToPost){
         this.messageRepository.save(Message.of({

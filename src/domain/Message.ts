@@ -1,23 +1,10 @@
-import { MessageTooLongError } from "./MessageTooLongError";
+import { MessageText } from "./MessageText";
 
 interface MessageOptions {
     id: string;
     text: string;
     author: string;
     postedAt: Date;
-}
-
-class MessageText {
-    private constructor(readonly value: string) {
-    }
-
-    static of(text: string): MessageText {
-        if(text.length > 280) {
-            throw new MessageTooLongError();
-        }
-
-        return new MessageText(text);
-    }
 }
 
 export class Message {

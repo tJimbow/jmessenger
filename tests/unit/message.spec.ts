@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { MessageRepository, PostMessage, DateProvider, MessageToPost } from "./PostMessage";
-import { Message } from "./Message";
-import { MessageTooLongError } from "./MessageTooLongError";
+import { PostMessage, DateProvider, MessageToPost } from "../../src/infrastructure/primary/PostMessage";
+import { MessageRepository } from "../../src/domain/MessageRepository";
+import { Message } from "../../src/domain/Message";
+import { MessageTooLongError } from "../../src/domain/MessageTooLongError";
 
 describe("message", () => {
     describe("posting a message", () => {
