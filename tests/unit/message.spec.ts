@@ -1,4 +1,6 @@
 import { describe, expect, it } from "vitest";
+import { MessageRepository, PostMessage } from "./PostMessage";
+import { Message } from "./Message";
 
 describe("message", () => {
     describe("posting a message", () => {
@@ -17,22 +19,30 @@ describe("message", () => {
             })
         })
     });
-    
 });
 
 let now;
 let message;
 
+const saveMessage = (_message: Message) => {
+    message = _message;
+};
+
 const givenNowIs = (_now: Date) => {
     now = _now;
 }
 
+const messageRepository: MessageRepository = {
+    save: saveMessage
+};
+
 const whenUserPostAMessage = (messageToPost: { id: string; author: string; message: string; }) => {
-    message = messageToPost;
-    message.postedAt = now;
+    const postedMessage = new PostMessage(messageRepository, () => now);
+
+    postedMessage.handle(messageToPost);
 }
 
-const thenMessageShouldBe = (expectedMessage: { id: string; author: string; message: string; postedAt: Date; }) => {
+const thenMessageShouldBe = (expectedMessage: Message) => {
     expect(message).toEqual(expectedMessage);
 }
 
