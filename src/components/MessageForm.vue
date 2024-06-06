@@ -2,7 +2,7 @@
     <div>
         <h2 data-selector="message.add.title">{{ title }}</h2>
         <input data-selector="message.add.text" type="text" placeholder="Enter your message" v-model="messageText" />
-        <button data-selector="message.add.button" @click="sendMessage">Send</button>
+        <button data-selector="message.add.button" @click="postMessage">Send</button>
     </div>
 </template>
 
@@ -14,7 +14,7 @@ export default defineComponent({
     setup() {
         const messageText = ref<string | null>(null);
 
-        const sendMessage = async () => {
+        const postMessage = async () => {
             const requestOptions = {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -25,7 +25,7 @@ export default defineComponent({
         }
 
         return {
-            sendMessage,
+            postMessage,
             title: 'Add a message',
             messageText
         }
