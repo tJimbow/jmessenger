@@ -18,7 +18,7 @@ describe("posting a message", () => {
         given_adding_message_should_return_201();
         when_i_visit_the_jmessenger_page();
         when_user_post_a_message("my first message");
-        then_the_message_should_be_posted_with({ author: "Alice", message: "my first message", postedAt: "2019-01-01T14:02:30.000Z"});
+        then_the_message_should_be_posted_with({ id: "message-id", author: "Alice", text: "my first message", postedAt: "2019-01-01T14:02:30.000Z"});
     })
 
     it("should post a message with text 'my second message' when the user click on the send button", () => {
@@ -26,7 +26,7 @@ describe("posting a message", () => {
         given_adding_message_should_return_201();
         when_i_visit_the_jmessenger_page();
         when_user_post_a_message("my second message");
-        then_the_message_should_be_posted_with({ author: "Alice", message: "my second message", postedAt: "2019-01-01T14:01:00.000Z"});
+        then_the_message_should_be_posted_with({ id: "message-id", author: "Alice", text: "my second message", postedAt: "2019-01-01T14:01:00.000Z"});
     })
 })
 
@@ -53,7 +53,7 @@ const when_user_post_a_message = (message: string) => {
     cy.get(dataSelector('message.add.button')).click();
 }
 
-const then_the_message_should_be_posted_with = (expectedPostedMessage: {author: string, message: string, postedAt: string}) => {
+const then_the_message_should_be_posted_with = (expectedPostedMessage: {id: string, author: string, text: string, postedAt: string}) => {
     cy.wait('@addMessage')
         .its('request.body')
         .should("deep.equal" , expectedPostedMessage);

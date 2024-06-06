@@ -1,14 +1,15 @@
 import { describe, expect, it } from "vitest";
-import { PostMessage, DateProvider, MessageToPost } from "../../src/infrastructure/primary/PostMessage";
+import { PostMessage, MessageToPost } from "../../src/infrastructure/primary/PostMessage";
 import { MessageRepository } from "../../src/domain/MessageRepository";
 import { Message } from "../../src/domain/Message";
 import { MessageTooLongError } from "../../src/domain/MessageTooLongError";
+import { DateProvider } from "../../src/infrastructure/primary/DateProvider";
 
 describe("message", () => {
     describe("posting a message", () => {
-        it("should post a message", () => {
+        it("should post a message", async () => {
             givenNowIs(new Date("2019-01-01T14:02:30.000Z"));
-            whenUserPostAMessage({
+            await whenUserPostAMessage({
                 id: "message-id",
                 author: "Alice",
                 text: "my first message",
@@ -21,11 +22,11 @@ describe("message", () => {
             }))
         })
 
-        it("should not post a message with more than 280 characters", () => {
+        it("should not post a message with more than 280 characters", async () => {
             const textWithMoreThan280Characters = "a".repeat(281);
 
             givenNowIs(new Date("2019-01-01T14:02:30.000Z"));
-            whenUserPostAMessage({
+            await whenUserPostAMessage({
                 id: "message-id",
                 author: "Alice",
                 text: textWithMoreThan280Characters,
@@ -50,6 +51,8 @@ class StubDateProvider implements DateProvider {
 const messageRepository: MessageRepository = {
     save: (_message: Message) => {
         message = _message;
+
+        return Promise.resolve();
     }
 };
 
@@ -57,10 +60,10 @@ const givenNowIs = (now: Date) => {
     dateProvider = new StubDateProvider(now);
 }
 
-const whenUserPostAMessage = (messageToPost: MessageToPost) => {
+const whenUserPostAMessage = async (messageToPost: MessageToPost) => {
     try {
         const postedMessage = new PostMessage(messageRepository, dateProvider);
-        postedMessage.handle(messageToPost);
+        await postedMessage.handle(messageToPost);
     } catch (_error) {
         thrownError = _error;
     }
