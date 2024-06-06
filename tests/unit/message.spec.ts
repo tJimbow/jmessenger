@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { MessageRepository, PostMessage, DateProvider } from "./PostMessage";
+import { MessageRepository, PostMessage, DateProvider, MessageToPost } from "./PostMessage";
 import { Message } from "./Message";
 
 describe("message", () => {
@@ -57,7 +57,7 @@ const givenNowIs = (now: Date) => {
     dateProvider = new StubDateProvider(now);
 }
 
-const whenUserPostAMessage = (messageToPost: { id: string; author: string; text: string; }) => {
+const whenUserPostAMessage = (messageToPost: MessageToPost) => {
     try {
         if(messageToPost.text.length > 280) throw new MessageTooLongError();
 

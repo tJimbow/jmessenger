@@ -19,11 +19,11 @@ export class PostMessage {
     constructor(private readonly messageRepository, private readonly dateProvider: DateProvider) { }
 
     handle(messageToPost: MessageToPost){
-        this.messageRepository.save({
+        this.messageRepository.save(Message.of({
             id: messageToPost.id,
             text: messageToPost.text,
             author: messageToPost.author,
             postedAt: this.dateProvider.getNow()
-        });
+        }));
     }
 }
