@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { MessageRepository, PostMessage, DateProvider, MessageToPost } from "./PostMessage";
 import { Message } from "./Message";
+import { MessageTooLongError } from "./MessageTooLongError";
 
 describe("message", () => {
     describe("posting a message", () => {
@@ -11,12 +12,12 @@ describe("message", () => {
                 author: "Alice",
                 text: "my first message",
             });
-            thenMessageShouldBe({
+            thenMessageShouldBe(Message.of({
                 id: "message-id",
                 author: "Alice",
                 text: "my first message",
                 postedAt: new Date("2019-01-01T14:02:30.000Z")
-            })
+            }))
         })
 
         it("should not post a message with more than 280 characters", () => {
@@ -36,8 +37,6 @@ describe("message", () => {
 let message: Message;
 let dateProvider: DateProvider;
 let thrownError: Error;
-
-class MessageTooLongError extends Error {}
 
 class StubDateProvider implements DateProvider {
     constructor(private readonly now: Date) { }
@@ -59,8 +58,6 @@ const givenNowIs = (now: Date) => {
 
 const whenUserPostAMessage = (messageToPost: MessageToPost) => {
     try {
-        if(messageToPost.text.length > 280) throw new MessageTooLongError();
-
         const postedMessage = new PostMessage(messageRepository, dateProvider);
         postedMessage.handle(messageToPost);
     } catch (_error) {

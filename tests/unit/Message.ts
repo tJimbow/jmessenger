@@ -1,3 +1,5 @@
+import { MessageTooLongError } from "./MessageTooLongError";
+
 interface MessageOptions {
     id: string;
     text: string;
@@ -5,17 +7,34 @@ interface MessageOptions {
     postedAt: Date;
 }
 
+class MessageText {
+    private constructor(readonly value: string) {
+    }
+
+    static of(text: string): MessageText {
+        if(text.length > 280) {
+            throw new MessageTooLongError();
+        }
+
+        return new MessageText(text);
+    }
+}
+
 export class Message {
     readonly id: string;
-    readonly text: string;
+    private readonly _text: MessageText;
     readonly author: string;
     readonly postedAt: Date;
 
-    constructor(options: MessageOptions) {
+    private constructor(options: MessageOptions) {
         this.author = options.author;
         this.id = options.id;
-        this.text = options.text;
+        this._text = MessageText.of(options.text);
         this.postedAt = options.postedAt;
+    }
+
+    get text(): string {
+        return this._text.value;
     }
 
     
