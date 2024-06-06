@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { MessageRepository, PostMessage } from "./PostMessage";
+import { MessageRepository, PostMessage, DateProvider } from "./PostMessage";
 import { Message } from "./Message";
 
 describe("message", () => {
@@ -21,23 +21,29 @@ describe("message", () => {
     });
 });
 
-let now;
-let message;
+let message: Message;
+let dateProvider: DateProvider;
 
-const saveMessage = (_message: Message) => {
-    message = _message;
-};
+class StubDateProvider implements DateProvider {
+    constructor(private readonly now: Date) { }
 
-const givenNowIs = (_now: Date) => {
-    now = _now;
+    getNow() {
+        return this.now;
+    }
 }
 
 const messageRepository: MessageRepository = {
-    save: saveMessage
+    save: (_message: Message) => {
+        message = _message;
+    }
 };
 
+const givenNowIs = (now: Date) => {
+    dateProvider = new StubDateProvider(now);
+}
+
 const whenUserPostAMessage = (messageToPost: { id: string; author: string; message: string; }) => {
-    const postedMessage = new PostMessage(messageRepository, () => now);
+    const postedMessage = new PostMessage(messageRepository, dateProvider);
 
     postedMessage.handle(messageToPost);
 }
