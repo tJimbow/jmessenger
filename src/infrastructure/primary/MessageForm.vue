@@ -7,32 +7,21 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, inject, ref } from 'vue';
 import type { DateProvider } from './DateProvider';
 import { PostMessage } from './PostMessage';
-import type { MessageRepository } from '../../domain/MessageRepository';
-import { Message } from '../../domain/Message';
-import { MessageJson } from '../secondary/MessageJson';
-import axios from 'axios';
+import { MessageHttp } from '../secondary/MessageHttp';
+import type { HttpInstance } from '@/infrastructure/primary/HttpInstance';
 
 export default defineComponent({
     name: 'MessageForm',
     setup() {
+        const httpInstance = inject<HttpInstance>("httpInstance")!;
+        const dateProvider = inject<DateProvider>("dateProvider")!;
         const messageText = ref<string>("");
-        const nowProvider: DateProvider = {
-            getNow: () => new Date()
-        };
 
-
-        const saveMessage = async (message: Message) => {
-            axios.post("http://localhost:4173/api/add-message", MessageJson.of(message));
-        }
-
-        const postMessageRespository: MessageRepository = {
-            save: saveMessage
-        };
-
-        const postMessage = new PostMessage(postMessageRespository, nowProvider);
+        const messageHttp = new MessageHttp(httpInstance);
+        const postMessage = new PostMessage(messageHttp, dateProvider);
 
         const onClick = () => postMessage.handle({ id: "message-id", author: "Alice", text: messageText.value });
 
