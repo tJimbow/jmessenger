@@ -3,7 +3,7 @@ import { Message } from "./Message";
 export interface MessageToPost {
     id: string;
     author: string;
-    message: string;
+    text: string;
 }
 
 export interface MessageRepository {
@@ -21,7 +21,7 @@ export class PostMessage {
     handle(messageToPost: MessageToPost){
         this.messageRepository.save({
             id: messageToPost.id,
-            message: messageToPost.message,
+            text: messageToPost.text,
             author: messageToPost.author,
             postedAt: this.dateProvider.getNow()
         });
