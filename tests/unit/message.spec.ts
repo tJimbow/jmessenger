@@ -1,8 +1,8 @@
 import { describe, it } from "vitest";
-import { Message } from "../../src/domain/Message";
 import { MessageTooLongError } from "../../src/domain/MessageTooLongError";
 import { MessageEmptyError } from "../../src/domain/MessageEmptyError";
 import { useMessageFixture } from "./message.fixture";
+import { messageBuilder } from "./MessageBuilder";
 
 describe("message", () => {
     describe("posting a message", () => {
@@ -15,12 +15,12 @@ describe("message", () => {
                 author: "Alice",
                 text: "my first message",
             });
-            thenMessageShouldBe(Message.of({
-                id: "message-id",
-                author: "Alice",
-                text: "my first message",
-                postedAt: new Date("2019-01-01T14:02:30.000Z")
-            }))
+            thenMessageShouldBe(
+                messageBuilder()
+                    .withText("my first message")
+                    .withPostedAt(new Date("2019-01-01T14:02:30.000Z"))
+                    .build()
+            );
         })
 
         it("should not post a message with more than 280 characters", async () => {

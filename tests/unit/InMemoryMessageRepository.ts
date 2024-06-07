@@ -9,6 +9,14 @@ export class InMemoryMessageRepository {
         return Promise.resolve();
     }
 
+    async saveMultipleMessage(messages: Message[]): Promise<void> {
+        messages.forEach(message => {
+            this.saveMessage(message);
+        });
+
+        return Promise.resolve();
+    }
+
     getById(id: string): Promise<Message> {
         return Promise.resolve(this.getMessageById(id));
     }
