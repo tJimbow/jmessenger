@@ -27,6 +27,8 @@ export default defineComponent({
         const postMessage = new PostMessage(messageHttp, dateProvider);
 
         const onClick = async () => {
+            errorText.value = "";
+
             try {
                 await postMessage.handle({ id: "message-id", author: "Alice", text: messageText.value });
             } catch (error) {

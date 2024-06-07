@@ -38,17 +38,11 @@ describe("posting a message", () => {
         then_it_should_display_error_message("Message is too long");
     })
 
-    it("should display 'Message should not be empty' error when the user try to send a message with empty message", () => {
+    it("should display 'Message should not be empty' error when the user try to send a message with empty message then remove it while sending a message", () => {
         given_now_is("2019-01-01T14:01:00.000Z");
         when_i_visit_the_jmessenger_page();
         when_user_post_an_empty_message();
         then_it_should_display_error_message("Message should not be empty");
-    })
-
-    it("should remove error when the user try to send a message with empty message then typing message to send", () => {
-        given_now_is("2019-01-01T14:01:00.000Z");
-        when_i_visit_the_jmessenger_page();
-        when_user_post_an_empty_message();
         when_user_post_a_message("My message");
         then_error_should_not_be_displayed();
     })
