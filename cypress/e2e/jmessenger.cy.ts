@@ -28,6 +28,15 @@ describe("posting a message", () => {
         when_user_post_a_message("my second message");
         then_the_message_should_be_posted_with({ id: "message-id", author: "Alice", text: "my second message", postedAt: "2019-01-01T14:01:00.000Z"});
     })
+
+    it("should display 'Message is too long' error when the user try to send a message with more than 280 characters", () => {
+        const tooLongMessage = "a".repeat(281);
+
+        given_now_is("2019-01-01T14:01:00.000Z");
+        when_i_visit_the_jmessenger_page();
+        when_user_post_a_message(tooLongMessage);
+        then_it_should_display_error_message("Message is too long");
+    })
 })
 
 const when_i_visit_the_jmessenger_page = () => {
@@ -64,3 +73,8 @@ const given_adding_message_should_return_201 = () => {
         statusCode: 201,
     }).as('addMessage');
 }
+
+const then_it_should_display_error_message = (message: string) => {
+    cy.contains(dataSelector('message.add.error'), message);
+}
+
