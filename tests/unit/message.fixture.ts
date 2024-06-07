@@ -1,22 +1,15 @@
 import { expect } from "vitest";
 import { PostMessage, MessageToPost } from "../../src/infrastructure/primary/PostMessage";
-import { MessageRepository } from "../../src/domain/MessageRepository";
 import { Message } from "../../src/domain/Message";
 import { StubDateProvider } from "./StubDateProvider";
+import { InMemoryMessageRepository } from "./InMemoryMessageRepository";
 
 export const useMessageFixture = () => {
     let thrownError: Error;
-    let message: Message;
 
     const dateProvider = new StubDateProvider();
-    const messageRepository: MessageRepository = {
-        save: (_message: Message) => {
-            message = _message;
-
-            return Promise.resolve();
-        }
-    };
-    const postedMessage = new PostMessage(messageRepository, dateProvider);
+    const inMemoryMessageRepository = new InMemoryMessageRepository();
+    const postedMessage = new PostMessage(inMemoryMessageRepository, dateProvider);
 
     const givenNowIs = (now: Date) => {
         dateProvider.now = now;
@@ -30,7 +23,9 @@ export const useMessageFixture = () => {
         }
     };
 
-    const thenMessageShouldBe = (expectedMessage: Message) => {
+    const thenMessageShouldBe = async (expectedMessage: Message) => {
+        const message = inMemoryMessageRepository.getMessageById(expectedMessage.id);
+
         expect(message).toEqual(expectedMessage);
     };
 
