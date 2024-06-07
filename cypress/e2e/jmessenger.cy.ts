@@ -37,6 +37,20 @@ describe("posting a message", () => {
         when_user_post_a_message(tooLongMessage);
         then_it_should_display_error_message("Message is too long");
     })
+
+    it("should display 'Message should not be empty' error when the user try to send a message with empty message", () => {
+        given_now_is("2019-01-01T14:01:00.000Z");
+        when_i_visit_the_jmessenger_page();
+        when_user_post_a_message("");
+        then_it_should_display_error_message("Message should not be empty");
+    })
+
+    it("should display 'Message should not be empty' error when the user try to send a message with only spaces", () => {
+        given_now_is("2019-01-01T14:01:00.000Z");
+        when_i_visit_the_jmessenger_page();
+        when_user_post_a_message("       ");
+        then_it_should_display_error_message("Message should not be empty");
+    })
 })
 
 const when_i_visit_the_jmessenger_page = () => {
