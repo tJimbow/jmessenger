@@ -3,6 +3,7 @@ import { PostMessage, MessageToPost } from "../../src/infrastructure/primary/Pos
 import { MessageRepository } from "../../src/domain/MessageRepository";
 import { Message } from "../../src/domain/Message";
 import { MessageTooLongError } from "../../src/domain/MessageTooLongError";
+import { MessageEmptyError } from "../../src/domain/MessageEmptyError";
 import { DateProvider } from "../../src/infrastructure/primary/DateProvider";
 
 describe("message", () => {
@@ -32,6 +33,16 @@ describe("message", () => {
                 text: textWithMoreThan280Characters,
             });
             thenErrorShouldBe(MessageTooLongError)
+        })
+        
+        it("should not post an empty message", async () => {
+            givenNowIs(new Date("2019-01-01T14:02:30.000Z"));
+            await whenUserPostAMessage({
+                id: "message-id",
+                author: "Alice",
+                text: "",
+            });
+            thenErrorShouldBe(MessageEmptyError)
         })
     });
 });
