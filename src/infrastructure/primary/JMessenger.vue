@@ -17,9 +17,7 @@ export default defineComponent({
         MessagesVue
     },
     setup() {
-        return {
-            title: 'Add a message'
-        }
+        return {}
     }
 })
 </script>
