@@ -10,7 +10,7 @@ export class MessageText {
             throw new MessageTooLongError();
         }
 
-        if(text.length === 0) {
+        if(text.trim().length === 0){
             throw new MessageEmptyError();
         }
 
