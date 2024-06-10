@@ -1,6 +1,7 @@
 import { Message } from "../../src/domain/Message";
+import { MessageRepository } from "../../src/domain/MessageRepository";
 
-export class InMemoryMessageRepository {
+export class InMemoryMessageRepository implements MessageRepository {
     messages = new Map<string, Message>() ;
 
     async save(message: Message): Promise<void> {
@@ -23,6 +24,10 @@ export class InMemoryMessageRepository {
 
     getMessageById(id: string): Message {
         return this.messages.get(id)!
+    }
+
+    getMessagesByAuthor(author: string): Promise<Message[]> {
+        return Promise.resolve([...this.messages.values()].filter(message => message.author === author));
     }
 
     private saveMessage(message: Message) {

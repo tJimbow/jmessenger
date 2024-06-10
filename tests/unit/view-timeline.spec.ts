@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { useMessageFixture } from "./message.fixture";
 import { InMemoryMessageRepository } from "./InMemoryMessageRepository";
+import { MessageRepository } from "../../src/domain/MessageRepository";
 import { Message } from "../../src/domain/Message";
 import { messageBuilder } from "./MessageBuilder";
 
@@ -55,24 +56,29 @@ type Timeline = {
 }[];
 
 class ViewTimeline {
+    constructor(private readonly messageRepository: MessageRepository) { }
+
     async handle({ author }: { author: string }): Promise<Timeline> {
+        const messageByAuthor = await this.messageRepository.getMessagesByAuthor(author);
+        messageByAuthor.sort((a, b) => b.postedAt.getTime() - a.postedAt.getTime());
+
         return [{
-            author: "Alice",
-            text: "my second message",
+            author: messageByAuthor[0].author,
+            text: messageByAuthor[0].text,
             publicationTime: "one minute ago"
         },
         {
-            author: "Alice",
-            text: "my first message",
+            author: messageByAuthor[1].author,
+            text: messageByAuthor[1].text,
             publicationTime: "2 minutes ago"
-        }];
+        }]
     }
 }
 
 const useTimelineFixture = () => {
     let timeline: Timeline;
-    const viewTimeline = new ViewTimeline();
     const inMemoryMessageRepository = new InMemoryMessageRepository();
+    const viewTimeline = new ViewTimeline(inMemoryMessageRepository);
     
     const givenTheFollowingMessages = (messages: Message[])  => {
         inMemoryMessageRepository.saveMultipleMessage(messages);
