@@ -3,13 +3,64 @@ import { PostMessage, MessageToPost } from "../../src/infrastructure/primary/Pos
 import { Message } from "../../src/domain/Message";
 import { StubDateProvider } from "./StubDateProvider";
 import { InMemoryMessageRepository } from "./InMemoryMessageRepository";
+import { MessageRepository } from "../../src/domain/MessageRepository";
+import { DateProvider } from "../../src/infrastructure/primary/DateProvider";
+
+type Timeline = {
+    author: string,
+    text: string,
+    publicationTime: string
+}[];
+
+export const publicationTime = (now: Date, postedAt: Date) => {
+    const timeElapsed = Math.floor((now.getTime() - postedAt.getTime()) / 60000)
+
+    if(timeElapsed < 1) {
+        return "less than a minute ago";
+    }
+
+    if(timeElapsed < 2) {
+        return "one minute ago";
+    }
+;
+
+    return `${timeElapsed} minutes ago`;
+}
+
+class ViewTimeline {
+    constructor(private readonly messageRepository: MessageRepository, private readonly dateProvider: DateProvider) { }
+
+    async handle({ author }: { author: string }): Promise<Timeline> {
+        const messageByAuthor = await this.messageRepository.getMessagesByAuthor(author);
+        messageByAuthor.sort((a, b) => b.postedAt.getTime() - a.postedAt.getTime());
+       
+        const now = this.dateProvider.getNow();
+
+        return [{
+            author: messageByAuthor[0].author,
+            text: messageByAuthor[0].text,
+            publicationTime: publicationTime(now, messageByAuthor[0].postedAt)
+        },{
+            author: messageByAuthor[1].author,
+            text: messageByAuthor[1].text,
+            publicationTime: publicationTime(now, messageByAuthor[1].postedAt)
+        },
+        {
+            author: messageByAuthor[2].author,
+            text: messageByAuthor[2].text,
+            publicationTime: publicationTime(now, messageByAuthor[2].postedAt)
+        }]
+    }
+}
 
 export const useMessageFixture = () => {
     let thrownError: Error;
+    let timeline: Timeline;
 
     const dateProvider = new StubDateProvider();
     const inMemoryMessageRepository = new InMemoryMessageRepository();
     const postedMessage = new PostMessage(inMemoryMessageRepository, dateProvider);
+    const viewTimeline = new ViewTimeline(inMemoryMessageRepository, dateProvider);
 
     const givenNowIs = (now: Date) => {
         dateProvider.now = now;
@@ -33,11 +84,28 @@ export const useMessageFixture = () => {
         expect(thrownError).toBeInstanceOf(expectedError);
     };
 
+    
+    const givenTheFollowingMessages = (messages: Message[])  => {
+        inMemoryMessageRepository.saveMultipleMessage(messages);
+    }
+    
+    const whenUserSeeTimeLineOf = async (author: string) => {
+        timeline = await viewTimeline.handle({ author });
+    }
+    
+    const thenUserShouldSee = (expectedTimeline: Timeline) => {
+        expect(timeline).toEqual(expectedTimeline);
+    }
+
+
     return {
         givenNowIs,
+        givenTheFollowingMessages,
         whenUserPostAMessage,
+        whenUserSeeTimeLineOf,
         thenMessageShouldBe,
         thenErrorShouldBe,
+        thenUserShouldSee,
     };
 };
 
