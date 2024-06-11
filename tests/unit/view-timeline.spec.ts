@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { publicationTime, useMessageFixture } from "./message.fixture";
+import { useMessageFixture } from "./message.fixture";
+import { PublicationTime } from "./publicationTime";
 import { messageBuilder } from "./MessageBuilder";
 
 
@@ -61,7 +62,7 @@ describe("publicationTime", () => {
         const now = new Date("2019-01-01T14:00:00.000Z");
         const postedAt = new Date("2019-01-01T13:59:30.000Z");
 
-        const text = publicationTime(now, postedAt);
+        const text = new PublicationTime({now, postedAt}).value;
 
         expect(text).toBe("less than a minute ago");
     });
@@ -70,7 +71,7 @@ describe("publicationTime", () => {
         const now = new Date("2019-01-01T14:00:00.000Z");
         const postedAt = new Date("2019-01-01T13:58:58.000Z");
 
-        const text = publicationTime(now, postedAt);
+        const text = new PublicationTime({now, postedAt}).value;
 
         expect(text).toBe("one minute ago");
     });
@@ -88,7 +89,7 @@ describe("publicationTime", () => {
         postedAt: new Date("2019-01-01T13:55:30.000Z"),
         expectedText: "4 minutes ago"
     }])("should return $expectedText", ({ now, postedAt, expectedText}) => {
-        const text = publicationTime(now, postedAt);
+        const text = new PublicationTime({now, postedAt}).value;
 
         expect(text).toBe(expectedText);
     });

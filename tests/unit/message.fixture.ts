@@ -5,27 +5,13 @@ import { StubDateProvider } from "./StubDateProvider";
 import { InMemoryMessageRepository } from "./InMemoryMessageRepository";
 import { MessageRepository } from "../../src/domain/MessageRepository";
 import { DateProvider } from "../../src/infrastructure/primary/DateProvider";
+import { PublicationTime } from "./publicationTime";
 
 type Timeline = {
     author: string,
     text: string,
     publicationTime: string
 }[];
-
-export const publicationTime = (now: Date, postedAt: Date) => {
-    const timeElapsed = Math.floor((now.getTime() - postedAt.getTime()) / 60000)
-
-    if(timeElapsed < 1) {
-        return "less than a minute ago";
-    }
-
-    if(timeElapsed < 2) {
-        return "one minute ago";
-    }
-;
-
-    return `${timeElapsed} minutes ago`;
-}
 
 class ViewTimeline {
     constructor(private readonly messageRepository: MessageRepository, private readonly dateProvider: DateProvider) { }
@@ -39,16 +25,16 @@ class ViewTimeline {
         return [{
             author: messageByAuthor[0].author,
             text: messageByAuthor[0].text,
-            publicationTime: publicationTime(now, messageByAuthor[0].postedAt)
+            publicationTime: new PublicationTime({now, postedAt:messageByAuthor[0].postedAt }).value
         },{
             author: messageByAuthor[1].author,
             text: messageByAuthor[1].text,
-            publicationTime: publicationTime(now, messageByAuthor[1].postedAt)
+            publicationTime: new PublicationTime({now, postedAt:messageByAuthor[1].postedAt }).value
         },
         {
             author: messageByAuthor[2].author,
             text: messageByAuthor[2].text,
-            publicationTime: publicationTime(now, messageByAuthor[2].postedAt)
+            publicationTime: new PublicationTime({now, postedAt:messageByAuthor[2].postedAt }).value
         }]
     }
 }
