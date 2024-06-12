@@ -1,6 +1,10 @@
 import { dataSelector } from "../fixtures/selector.fixture";
 
 describe("messages", () => {
+    beforeEach(() => {
+        given_messages_for_alice([]);
+    });
+
     it("should display message liste", () => {
         when_i_visit_the_jmessenger_page();
         then_i_should_see_messages_page_title();
@@ -8,6 +12,10 @@ describe("messages", () => {
 })
 
 describe("posting a message", () => {
+    beforeEach(() => {
+        given_messages_for_alice([]);
+    });
+    
     it("should access to the adding message form", () => {
         when_i_visit_the_jmessenger_page();
         then_i_should_see_adding_message_form();
@@ -65,9 +73,9 @@ describe("view timeline", () => {
         ]);
         when_i_visit_the_jmessenger_page();
         then_alice_should_see_her_messages([
-            { position: "1", text: "my last message", publicationTime: "less than a minute ago" },
-            { position: "2", text: "my second message", publicationTime: "one minute ago" },
-            { position: "3", text: "my first message", publicationTime: "2 minutes ago" },
+            { text: "my last message", publicationTime: "less than a minute ago" },
+            { text: "my second message", publicationTime: "one minute ago" },
+            { text: "my first message", publicationTime: "2 minutes ago" },
         ]);
     })
 });
@@ -126,13 +134,16 @@ interface MessageJson {
 }
 
 const given_messages_for_alice = (messages: MessageJson[]) => {
-    cy.intercept('GET', '/api/messages?author=Alice', { data: messages });
+    cy.intercept('GET', '/api/messages?author=Alice', messages);
 }
 
-const then_alice_should_see_her_messages = (displayedMessage: { position: string; text: string; publicationTime: string; }[]) => {
-    displayedMessage.forEach(({ position, text, publicationTime }) => {
+const then_alice_should_see_her_messages = (displayedMessage: { text: string; publicationTime: string; }[]) => {
+    let position = 0;
+
+    displayedMessage.forEach(({ text, publicationTime }) => {
         cy.get(dataSelector(`timeline.message.${position}.text`)).contains(text);
         cy.get(dataSelector(`timeline.message.${position}.publicationTime`)).contains(publicationTime);
+        position++;
     });
 }
 

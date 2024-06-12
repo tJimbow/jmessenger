@@ -8,7 +8,7 @@ const ONE_MINUTE_TO_MS = 60000;
 export class PublicationTime {
     readonly value: string;
 
-    constructor(options) {
+    constructor(options: PublicationTimeOptions) {
         const timeElapsed = Math.floor((options.now.getTime() - options.postedAt.getTime()) / ONE_MINUTE_TO_MS);
 
         if (timeElapsed < 1) {
@@ -22,9 +22,7 @@ export class PublicationTime {
         }
     }
 
-
     static of(options: PublicationTimeOptions): PublicationTime {
         return new PublicationTime(options);
     }
-
 }

@@ -26,7 +26,7 @@ export class InMemoryMessageRepository implements MessageRepository {
         return this.messages.get(id)!
     }
 
-    getMessagesByAuthor(author: string): Promise<Message[]> {
+    async getMessagesByAuthor(author: string): Promise<Message[]> {
         return Promise.resolve([...this.messages.values()].filter(message => message.author === author));
     }
 

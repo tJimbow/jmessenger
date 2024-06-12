@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { useMessageFixture } from "./message.fixture";
-import { PublicationTime } from "./publicationTime";
+import { PublicationTime } from "../../src/infrastructure/primary/PublicationTime";
 import { messageBuilder } from "./MessageBuilder";
 
 

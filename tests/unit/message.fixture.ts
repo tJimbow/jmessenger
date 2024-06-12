@@ -3,41 +3,8 @@ import { PostMessage, MessageToPost } from "../../src/infrastructure/primary/Pos
 import { Message } from "../../src/domain/Message";
 import { StubDateProvider } from "./StubDateProvider";
 import { InMemoryMessageRepository } from "./InMemoryMessageRepository";
-import { MessageRepository } from "../../src/domain/MessageRepository";
-import { DateProvider } from "../../src/infrastructure/primary/DateProvider";
-import { PublicationTime } from "./publicationTime";
-
-type Timeline = {
-    author: string,
-    text: string,
-    publicationTime: string
-}[];
-
-class ViewTimeline {
-    constructor(private readonly messageRepository: MessageRepository, private readonly dateProvider: DateProvider) { }
-
-    async handle({ author }: { author: string }): Promise<Timeline> {
-        const messageByAuthor = await this.messageRepository.getMessagesByAuthor(author);
-        messageByAuthor.sort((a, b) => b.postedAt.getTime() - a.postedAt.getTime());
-       
-        const now = this.dateProvider.getNow();
-
-        return [{
-            author: messageByAuthor[0].author,
-            text: messageByAuthor[0].text,
-            publicationTime: new PublicationTime({now, postedAt:messageByAuthor[0].postedAt }).value
-        },{
-            author: messageByAuthor[1].author,
-            text: messageByAuthor[1].text,
-            publicationTime: new PublicationTime({now, postedAt:messageByAuthor[1].postedAt }).value
-        },
-        {
-            author: messageByAuthor[2].author,
-            text: messageByAuthor[2].text,
-            publicationTime: new PublicationTime({now, postedAt:messageByAuthor[2].postedAt }).value
-        }]
-    }
-}
+import { ViewTimeline } from "../../src/infrastructure/primary/ViewTimeline";
+import { Timeline } from "../../src/infrastructure/primary/Timeline";
 
 export const useMessageFixture = () => {
     let thrownError: Error;
