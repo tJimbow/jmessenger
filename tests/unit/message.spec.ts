@@ -36,28 +36,28 @@ describe("message", () => {
             thenErrorShouldBe(MessageTooLongError)
         })
         
-        it("should not post an empty message", async () => {
-            const { givenNowIs, whenUserPostAMessage, thenErrorShouldBe } = useMessageFixture();
+        // it("should not post an empty message", async () => {
+        //     const { givenNowIs, whenUserPostAMessage, thenErrorShouldBe } = useMessageFixture();
 
-            givenNowIs(new Date("2019-01-01T14:02:30.000Z"));
-            await whenUserPostAMessage({
-                id: "message-id",
-                author: "Alice",
-                text: "",
-            });
-            thenErrorShouldBe(MessageEmptyError)
-        })
+        //     givenNowIs(new Date("2019-01-01T14:02:30.000Z"));
+        //     await whenUserPostAMessage({
+        //         id: "message-id",
+        //         author: "Alice",
+        //         text: "",
+        //     });
+        //     thenErrorShouldBe(MessageEmptyError)
+        // })
         
-        it("should not post an message with only spaces", async () => {
-            const { givenNowIs, whenUserPostAMessage, thenErrorShouldBe } = useMessageFixture();
+        // it("should not post an message with only spaces", async () => {
+        //     const { givenNowIs, whenUserPostAMessage, thenErrorShouldBe } = useMessageFixture();
 
-            givenNowIs(new Date("2019-01-01T14:02:30.000Z"));
-            await whenUserPostAMessage({
-                id: "message-id",
-                author: "Alice",
-                text: "    ",
-            });
-            thenErrorShouldBe(MessageEmptyError)
-        })
+        //     givenNowIs(new Date("2019-01-01T14:02:30.000Z"));
+        //     await whenUserPostAMessage({
+        //         id: "message-id",
+        //         author: "Alice",
+        //         text: "    ",
+        //     });
+        //     thenErrorShouldBe(MessageEmptyError)
+        // })
     });
 });

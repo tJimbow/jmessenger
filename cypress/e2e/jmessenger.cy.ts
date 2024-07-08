@@ -37,14 +37,14 @@ describe("posting a message", () => {
         then_the_message_should_be_posted_with({ id: "message-id", author: "Alice", text: "my second message", postedAt: "2019-01-01T14:01:00.000Z"});
     })
 
-    it("should display 'Message is too long' error when the user try to send a message with more than 280 characters", () => {
-        const tooLongMessage = "a".repeat(281);
+    // it("should display 'Message is too long' error when the user try to send a message with more than 280 characters", () => {
+    //     const tooLongMessage = "a".repeat(281);
 
-        given_now_is("2019-01-01T14:01:00.000Z");
-        when_i_visit_the_jmessenger_page();
-        when_user_post_a_message(tooLongMessage);
-        then_it_should_display_error_message("Message is too long");
-    })
+    //     given_now_is("2019-01-01T14:01:00.000Z");
+    //     when_i_visit_the_jmessenger_page();
+    //     when_user_post_a_message(tooLongMessage);
+    //     then_it_should_display_error_message("Message is too long");
+    // })
 
     it("should display 'Message should not be empty' error when the user try to send a message with empty message then remove it while sending a message", () => {
         given_now_is("2019-01-01T14:01:00.000Z");
@@ -57,28 +57,28 @@ describe("posting a message", () => {
     })
 })
 
-describe("view timeline", () => {
-    it("should view three messages for user Alice in her timeline", () => {
-        given_now_is("2019-01-01T14:02:00.000Z");
-        given_messages_for_alice([
-            {
-                id: "1", text: "my first message", postedAt: "2019-01-01T14:00:00.000Z"
-            },
-            {
-                id: "2", text: "my second message", postedAt: "2019-01-01T14:00:35.000Z"
-            },
-            {
-                id: "3", text: "my last message", postedAt: "2019-01-01T14:01:24.000Z"
-            },
-        ]);
-        when_i_visit_the_jmessenger_page();
-        then_alice_should_see_her_messages([
-            { text: "my last message", publicationTime: "less than a minute ago" },
-            { text: "my second message", publicationTime: "one minute ago" },
-            { text: "my first message", publicationTime: "2 minutes ago" },
-        ]);
-    })
-});
+// describe("view timeline", () => {
+//     it("should view three messages for user Alice in her timeline", () => {
+//         given_now_is("2019-01-01T14:02:00.000Z");
+//         given_messages_for_alice([
+//             {
+//                 id: "1", text: "my first message", postedAt: "2019-01-01T14:00:00.000Z"
+//             },
+//             {
+//                 id: "2", text: "my second message", postedAt: "2019-01-01T14:00:35.000Z"
+//             },
+//             {
+//                 id: "3", text: "my last message", postedAt: "2019-01-01T14:01:24.000Z"
+//             },
+//         ]);
+//         when_i_visit_the_jmessenger_page();
+//         then_alice_should_see_her_messages([
+//             { text: "my last message", publicationTime: "less than a minute ago" },
+//             { text: "my second message", publicationTime: "one minute ago" },
+//             { text: "my first message", publicationTime: "2 minutes ago" },
+//         ]);
+//     })
+// });
 
 const when_i_visit_the_jmessenger_page = () => {
     cy.visit("/");

@@ -12,9 +12,9 @@ export default mergeConfig(
       coverage: {
           provider: "istanbul",
           reportsDirectory: "coverage/unit",
-          reporter: ["html", "text-summary", "lcov"],
+          reporter: ["html", "text-summary", "json"],
           include: ["src/"],
-          exclude: ["src/router/**", "src/stores/**"],
+          exclude: ["src/router/**", "src/stores/**"]
       },
       outputFile: {
           junit: "test-result/junit.xml",

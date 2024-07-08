@@ -18,6 +18,8 @@ coverage
 /cypress/screenshots/
 /.nyc_output
 /test-result
+/reports
+/coverage-final
 
 # Editor directories and files
 .vscode/*
