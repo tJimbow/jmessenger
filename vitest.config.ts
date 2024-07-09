@@ -12,7 +12,7 @@ export default mergeConfig(
       coverage: {
           provider: "istanbul",
           reportsDirectory: "coverage/unit",
-          reporter: ["html", "text-summary", "json"],
+          reporter: ["html", "text-summary", "json", "lcov"],
           include: ["src/"],
           exclude: ["src/router/**", "src/stores/**"]
       },
