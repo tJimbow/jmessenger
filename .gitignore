@@ -20,6 +20,7 @@ coverage
 /test-result
 /reports
 /coverage-final
+/.sonar/
 
 # Editor directories and files
 .vscode/*
