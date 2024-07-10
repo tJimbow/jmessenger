@@ -59,3 +59,25 @@ npm run test:e2e
 ```sh
 npm run lint
 ```
+
+## Use Sonar
+
+Please run with:
+
+```shell
+docker-compose -f sonar.yml up -d
+```
+
+Then, connect to Sonar with `admin` login and `admin` password on http://127.0.0.1:9001/.
+
+Change your password and create Global Analysis Token in http://127.0.0.1:9001/account/security.
+
+Then copy the token as the `sonar.token` in `sonar-project.properties`.
+
+And run:
+
+```shell
+npm run sonar
+```
+
+Now you may be able to see the result as a project on http://127.0.0.1:9001/.

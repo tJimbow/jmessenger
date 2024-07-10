@@ -17,7 +17,8 @@
     "format": "prettier --write src/",
     "test:coverage": "run-p test:unit test:e2e && node move-coverage.cjs && npm run test:coverage:merge && npm run test:coverage:report",
     "test:coverage:merge": "nyc merge reports .nyc_output/out.json",
-    "test:coverage:report": "nyc report --reporter html --report-dir coverage-final"
+    "test:coverage:report": "nyc report --reporter html --report-dir coverage-final",
+    "sonar": "sonar-scanner"
   },
   "dependencies": {
     "pinia": "^2.1.7",
@@ -44,6 +45,7 @@
     "jsdom": "^24.1.0",
     "npm-run-all2": "^6.1.2",
     "prettier": "^3.2.5",
+    "sonarqube-scanner": "^4.0.1",
     "start-server-and-test": "^2.0.3",
     "typescript": "~5.4.0",
     "vite": "^5.3.3",
