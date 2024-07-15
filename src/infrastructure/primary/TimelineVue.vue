@@ -10,7 +10,7 @@
 
 <script lang="ts">
 import { defineComponent, inject, onMounted, ref } from 'vue';
-import type { HttpInstance } from './HttpInstance';
+import type { AxiosHttpInstance } from './HttpInstance';
 import type { DateProvider } from './DateProvider';
 import type { Timeline } from './Timeline';
 import { MessageHttp } from '../secondary/MessageHttp';
@@ -19,11 +19,11 @@ import { ViewTimeline } from './ViewTimeline';
 export default defineComponent({
     name: 'TimelineVue',
     setup() {
-        const httpInstance = inject<HttpInstance>("httpInstance")!;
+        const axiosHttpInstance = inject<AxiosHttpInstance>("axiosHttpInstance")!;
         const dateProvider = inject<DateProvider>("dateProvider")!;
         const timelineMessages = ref<Timeline>([]);
         
-        const messageHttp = new MessageHttp(httpInstance);
+        const messageHttp = new MessageHttp(axiosHttpInstance);
         const viewTimeline = new ViewTimeline(messageHttp, dateProvider);
 
         onMounted(async () => {

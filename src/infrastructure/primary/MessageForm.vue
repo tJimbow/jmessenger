@@ -12,18 +12,18 @@ import { defineComponent, inject, ref } from 'vue';
 import type { DateProvider } from './DateProvider';
 import { PostMessage } from './PostMessage';
 import { MessageHttp } from '../secondary/MessageHttp';
-import type { HttpInstance } from '@/infrastructure/primary/HttpInstance';
+import type { AxiosHttpInstance } from '@/infrastructure/primary/HttpInstance';
 import { MessageTooLongError } from '@/domain/MessageTooLongError';
 
 export default defineComponent({
     name: 'MessageForm',
     setup() {
-        const httpInstance = inject<HttpInstance>("httpInstance")!;
+        const axiosHttpInstance = inject<AxiosHttpInstance>("axiosHttpInstance")!;
         const dateProvider = inject<DateProvider>("dateProvider")!;
         const errorText = ref<string>("");
         const messageText = ref<string>("");
 
-        const messageHttp = new MessageHttp(httpInstance);
+        const messageHttp = new MessageHttp(axiosHttpInstance);
         const postMessage = new PostMessage(messageHttp, dateProvider);
 
         const onClick = async () => {
