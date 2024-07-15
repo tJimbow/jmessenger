@@ -1,6 +1,6 @@
 import { MessageText } from "./MessageText";
 
-interface MessageOptions {
+export interface MessageOptions {
     id: string;
     text: string;
     author: string;

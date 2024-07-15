@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { useMessageFixture } from "./message.fixture";
 import { PublicationTime } from "../../src/infrastructure/primary/PublicationTime";
-import { messageBuilder } from "./MessageBuilder";
+import { stubMessage } from "./StubMessage";
 
 
 describe("view timeline", () => {
@@ -9,30 +9,10 @@ describe("view timeline", () => {
         const { givenNowIs, givenTheFollowingMessages, whenUserSeeTimeLineOf, thenUserShouldSee } = useMessageFixture();
 
         givenTheFollowingMessages([
-            messageBuilder()
-                .withId("1")
-                .withAuthor("Alice")
-                .withText("my first message")
-                .withPostedAt(new Date("2019-01-01T14:00:00.000Z"))
-                .build(),
-            messageBuilder()
-                .withId("2")
-                .withAuthor("Bob")
-                .withText("my first message")
-                .withPostedAt(new Date("2019-01-01T14:01:30.000Z"))
-                .build(),
-            messageBuilder()
-                .withId("3")
-                .withAuthor("Alice")
-                .withText("my second message")
-                .withPostedAt(new Date("2019-01-01T14:01:00.000Z"))
-                .build(),
-            messageBuilder()
-                .withId("4")
-                .withAuthor("Alice")
-                .withText("my last message")
-                .withPostedAt(new Date("2019-01-01T14:01:30.000Z"))
-                .build(),
+            stubMessage({ id: "1", author: "Alice", text: "my first message", postedAt: new Date("2019-01-01T14:00:00.000Z") }),
+            stubMessage({ id: "2", author: "Bob", text: "my first message", postedAt: new Date("2019-01-01T14:01:30.000Z") }),
+            stubMessage({ id: "3", author: "Alice", text: "my second message", postedAt: new Date("2019-01-01T14:01:00.000Z") }),
+            stubMessage({ id: "4", author: "Alice", text: "my last message", postedAt: new Date("2019-01-01T14:01:30.000Z") }),
         ]);
         givenNowIs(new Date("2019-01-01T14:02:00.000Z"));
         await whenUserSeeTimeLineOf("Alice");
