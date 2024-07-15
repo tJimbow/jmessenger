@@ -10,22 +10,15 @@
 
 <script lang="ts">
 import { defineComponent, inject, onMounted, ref } from 'vue';
-import type { AxiosHttpInstance } from './HttpInstance';
-import type { DateProvider } from './DateProvider';
 import type { Timeline } from './Timeline';
-import { MessageHttp } from '../secondary/MessageHttp';
 import { ViewTimeline } from './ViewTimeline';
 
 export default defineComponent({
     name: 'TimelineVue',
     setup() {
-        const axiosHttpInstance = inject<AxiosHttpInstance>("axiosHttpInstance")!;
-        const dateProvider = inject<DateProvider>("dateProvider")!;
+        const viewTimeline = inject<ViewTimeline>("viewTimeline")!;
         const timelineMessages = ref<Timeline>([]);
         
-        const messageHttp = new MessageHttp(axiosHttpInstance);
-        const viewTimeline = new ViewTimeline(messageHttp, dateProvider);
-
         onMounted(async () => {
             timelineMessages.value = await viewTimeline.handle({author: "Alice"});
         });
