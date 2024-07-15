@@ -9,15 +9,15 @@ const REPORTS_FOLDER = 'reports';
 const FINAL_OUTPUT_FOLDER = 'coverage-final';
  
 // Create the reports folder and move the reports from cypress and jest inside it
-fs.emptyDirSync(REPORTS_FOLDER);
-fs.copyFileSync(
+await fs.emptyDir(REPORTS_FOLDER);
+await fs.copyFile(
   'coverage/cypress/coverage-final.json',
   `${REPORTS_FOLDER}/from-cypress.json`
 );
-fs.copyFileSync(
+await fs.copyFile(
   'coverage/unit/coverage-final.json',
   `${REPORTS_FOLDER}/from-vitest.json`
 );
  
-fs.emptyDirSync(".nyc_output");
-fs.emptyDirSync(FINAL_OUTPUT_FOLDER);
+await fs.emptyDir(".nyc_output");
+await fs.emptyDir(FINAL_OUTPUT_FOLDER);
